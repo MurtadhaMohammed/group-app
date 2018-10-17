@@ -1,0 +1,31 @@
+{
+  "name": "group-app",
+  "version": "1.0.0",
+  "description": "A minimal Electron application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "rebuild": "electron-rebuild  -f  -w sqlite3 -v 2.0",
+    "build-win": "electron-packager . Groups  --overwrite --asar=true   --platform=win32 --arch=ia32 --icon=logo.ico --prune=true --out=dist"
+  },
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "GitHub",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "electron-packager": "^12.1.0",
+    "electron-rebuild": "^1.7.3"
+  },
+  "dependencies": {
+    "electron": "^2.0.3",
+    "jquery": "^3.3.1",
+    "sqlite3": "^4.0.1",
+    "sweetalert": "^2.1.0"
+  }
+}

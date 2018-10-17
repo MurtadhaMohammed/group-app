@@ -1,0 +1,378 @@
+/* arabic */
+@font-face {
+    font-family: 'Cairo';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Cairo'), local('Cairo-Regular'), url('../fonts/Cairo-Regular.ttf') format('woff2');
+    unicode-range: U+0600-06FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE80-FEFC;
+  }
+  /* latin-ext */
+  @font-face {
+    font-family: 'Cairo';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Cairo'), local('Cairo-Regular'), url('../fonts/Cairo-Bold.ttf') format('woff2');
+    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  /* latin */
+  @font-face {
+    font-family: 'Cairo';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Cairo'), local('Cairo-Regular'), url('../fonts/Cairo-ExtraLight.ttf') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+body{
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+    
+}
+main{
+    width: 100%;
+    height: 91vh;
+    position: fixed;
+    background-image: url('../imgs/background.svg');
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    overflow: auto
+}
+*,button{
+    font-family: 'Cairo', sans-serif !important;
+}
+.brand{
+    float: left;
+    margin-top: -12px;
+    margin-left: 16px;
+}
+.brand h1{
+    font-weight: normal;
+    color: #607D8B;
+}
+.brand h1 span{
+    font-weight: bolder;
+    color: #00BCD4;
+}
+nav{
+    height: 55px;
+    background: rgba(204, 204, 204, 0.25);;
+    padding: 10px;
+    box-shadow: 0px 3px 20px -8px #333;
+}
+
+nav ul {
+    float: right;
+    padding: 0;
+    margin: 0;
+}
+nav ul li{
+    list-style-type: none;
+    float: right;
+}
+nav ul li button{
+    border: none;
+    margin: 5px;
+    padding: 5px 20px;
+    font-size: 18px;
+    width: 125px;
+    border-radius: 5px;
+    box-shadow: 0px 3px 11px -4px #333;
+    background: #607d8b;
+    color: #fff;
+    outline: none;
+    transition: .3s
+}
+nav ul li button:hover{
+    box-shadow: 0px 3px 11px -3px #333;
+    background: rgba(0, 187, 212, 0.699);
+}
+nav ul li button:focus{
+    background: rgba(3, 197, 223, 0.781);
+}
+nav ul li .active{
+    background: rgba(3, 197, 223, 0.781);
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    
+  }
+
+  td,
+  th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+  }
+
+  tr:nth-child(even) {
+    background-color:  rgba(221, 221, 221, 0.25);
+  }
+
+  .people{
+    margin: 30px;
+    box-shadow: -1px 4px 13px -4px rgba(51, 51, 51, 0.66);
+    border-radius: 5px;
+    overflow: hidden;
+     background: rgba(255, 255, 255, 0.81);
+  }
+  .people .body{
+    height: 72vh;
+    overflow: auto
+  }
+
+  .people td.control{
+     width: 100px
+  }
+  .people td.control button{
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0px 3px 9px -2px rgba(51, 51, 51, 0.58);
+    color: #fff;
+    cursor: pointer;
+    outline: none;
+    transition: .3s;
+  }
+  .people td.control button:hover{
+    box-shadow: 0px 3px 9px 0px rgba(51, 51, 51, 0.58);
+  }
+  .people td.control button.btn-edit{
+   background: #ff9800
+  }
+  .people td.control button.btn-delete{
+   background: #e91e1e
+  }
+  #search{
+    margin: 15px;
+    width: 200px;
+    border: 0;
+    border: 1px solid #ccc;
+    padding: 4px 10px;
+    border-radius: 30px ;
+    outline: none
+
+  }
+  
+  .people .header #search:focus{
+      border-color: #00BCD4;
+  }
+  .people .header .btn-add,
+  .group-info .header .btn-remove,
+  .group-info .header .btn-print{
+    float: left;
+    margin: 15px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    background: #8BC34A;
+    color: #fff;
+    font-size: 18px;
+    box-shadow: 0px 3px 11px -4px #333;
+    transition: .3s;
+    padding: 0px 20px;
+    margin-right: 0px;
+  }
+  .group-info .header .btn-remove{
+      background-color: red;
+      margin-right: 50px
+  }
+  .group-info .header .btn-print{
+      background-color: #03A9F4
+  }
+  .group-info .header .btn-print:hover{
+      background-color: rgb(53, 188, 250)
+  }
+  .group-info .header .btn-remove:hover{
+      background-color: rgba(255, 44, 44, 0.726)
+  }
+  .people .header .btn-add:hover{
+      background: rgb(147, 226, 50)
+  }
+
+  .groups{
+      margin-right: 20%;
+      margin-left: 20%;
+      margin-top: 30px;
+      margin-bottom: 30px;
+  }
+  @media(max-width:1000px){
+    .groups{
+        margin-right: 10%;
+        margin-left: 10%;
+    }
+  }
+  .groups .group-card{
+      width: 100%;
+      
+      overflow: hidden;
+  }
+
+  .groups .group-card .group-num{
+      float: right;
+      border-left: 1px solid #ccc;
+      width: 150px;
+      text-align: center;
+      font-weight: bolder;
+      background-image: linear-gradient(to right top, #2b5d5d, #348080, #3da4a4, #45cac9, #4cf2f0);
+  }
+  .groups .group-card .group-num h1{
+      font-weight: bolder;
+      color: #fff;
+  }
+  .groups .group-card .group-date{
+     width: 60%;
+     text-align: center;
+  }
+  .groups .group-card .group-date h1{
+     color: #00BCD4
+  }
+  .groups .group-card .content{
+      width: 90%;
+      position: relative;
+      background: #fff;
+      margin: 10px;
+      margin-top: 20px;
+      display: flex;
+      box-shadow: 0px 6px 11px -7px #333;
+      height: 100px;
+  }
+  .groups .group-card .group-control .btn-show{
+    position: absolute;
+    left: -49px;
+    top: 21px;
+    border: none;
+    border-radius:0 30px ;
+    height: 60px;
+    width: 130px;
+    background: #8BC34A;
+    box-shadow: -1px 4px 7px -4px #333;
+    color: #fff;
+    font-weight: bold;
+    transition: .3s;
+    cursor: pointer;
+    outline: none
+  }
+  .groups .group-card .group-control .btn-show:hover{
+    left: -55px;
+  }
+  .groups .new-group{
+      display: inline-flex
+  }
+  .groups .new-group input{
+    width: 200px;
+    font-size: 20px;
+    text-align: center;
+  }
+  .groups .new-group button{
+    border: none;
+    /* border-radius: 5px; */
+    padding: 5px 20px;
+    color: #fff;
+    background: #4CAF50;
+    font-size: 20px;
+    margin-right: 10px;
+  }
+
+  /* modal input */
+  .modal{
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      background-color: rgba(51, 51, 51, 0.548);
+      z-index: 10000;
+      overflow: auto;
+      display: none
+  }
+  .modal .content{
+    width: 60%;
+    background: #fff;
+    margin: auto;
+    margin-top: 20vh;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  @media(max-width:1000px){
+    .modal .content{
+        width: 80%;
+      }
+  }
+  .modal .content .modal-header .close{
+    border: none;
+    background: transparent;
+    font-size: 40px;
+    padding: 0;
+    margin: -4px;
+    line-height: 0;
+    float: left;
+    outline: none;
+  }
+  .modal .content .modal-header .close:hover{
+      color: red;
+  }
+  .modal .content .modal-header .title{
+    float: right;
+    line-height: 0;
+    margin: 0;
+  }
+  .modal .content .modal-header,
+  .modal .content .modal-footer{
+      background: rgba(204, 204, 204, 0.23);;
+      padding: 20px;
+  }
+  .modal .content .modal-body{
+      padding: 20px;
+  }
+  .modal .content .modal-body input{
+      padding: 4px 10px;
+      font-size: 20px;
+      width: 80%;
+      margin: auto;
+      display: -webkit-box;
+      margin-top: 30px;
+  }
+  .modal .content .modal-footer .modal-btn{
+      background: #8BC34A;
+      color: #fff;
+      outline: none;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 20px;
+  }
+  .modal .content .modal-footer .modal-btn:hover{
+    background: rgb(160, 231, 79);
+  }
+
+  #selectNamesModal .content{
+      margin-top: 5vh
+  }
+  #selectNamesModal .content .modal-header{
+      padding: 10px
+  }
+  #selectNamesModal .content .modal-header #search{
+      margin: 0;
+  }
+  #selectNamesModal .content .modal-header .close{
+      margin: 14px
+  }
+  #selectNamesModal .content .modal-footer .row_num{
+     float: left;
+     margin: 0
+  }
+ 
+  #names {
+      height: 65vh;
+      overflow: auto;
+  }
+  #names th input,
+  #names td input{
+    margin-top: 6px;
+  }
+
+ .report-title{
+     text-align: center
+ }

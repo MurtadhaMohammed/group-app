@@ -1,0 +1,48 @@
+<div class="groups">
+    <div class="new-group">
+        <button id="addNewGroup">مجموعة جديدة</button>
+        <input type="date" name="" id="groupDate">
+    </div>
+    <div class="all-groups">
+
+    </div>
+
+</div>
+<script src="./service.js"></script>
+<script>
+    getdata();
+
+    $('#addNewGroup').click(function () {
+        var date = $('#groupDate').val();
+        if (date) {
+            insertGroup(date);
+            
+            swal({
+                title: "تمت العملية بنجاح",
+                icon: "success",
+                button: "تابع",
+            });
+            getdata();
+        } else {
+            swal({
+                title: "يجب تحديد التاريخ اولا",
+                icon: "warning",
+                button: "فهمت",
+            });
+        }
+    })
+
+    function getdata() {
+        getGroups(function (err, row) {
+            if (!err) {
+                $('.all-groups').html('');
+                row.forEach(result => {
+                    $('.all-groups').append(
+                        '<div class="group-card"><div class="content"><div class="group-num"><h1>' + result.num + '</h1></div><div class="group-date"><h1>' + result.date + '</h1>' +
+                        '</div> <div class="group-control"><button route="group-info?id=' + result.id + '&num='+ result.num +'&date='+ result.date +'" class="btn-show">عرض التفاصيل</button></div></div></div>'
+                    )
+                });
+            }
+        });
+    }
+</script>

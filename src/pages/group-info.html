@@ -1,0 +1,261 @@
+<div class="group-info people">
+    <div class="header">
+        <input type="text" name="" id="search" placeholder="ادخل كلمة البحث">
+        <span class="group-title"> </span>
+        <button id="deleteGroup" class="btn-remove">حذف</button>
+        <button id="print" class="btn-print">طباعة</button>
+        <button id="addNewGroup" class="btn-add">تحديد اسم جديد</button>
+    </div>
+    <div class="body">
+
+        <table id="printTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>الاسم الكامل</th>
+                    <th>تاريخ الميلاد</th>
+                    <th>التحصيل الدراسي</th>
+                    <th>رقم الهاتف</th>
+                    <th class="no-print"></th>
+                </tr>
+            </thead>
+            <tbody class="group-row">
+
+            </tbody>
+        </table>
+
+    </div>
+
+    <div id="selectNamesModal" class="modal">
+        <div class="content">
+            <div class="modal-header">
+                <input type="text" name="" class="searchModal" id="search" placeholder="ادخل كلمة البحث">
+                <button class="close">&times;</button>
+            </div>
+            <div class="modal-body" id="names">
+                <table id="selectTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>الاسماء</th>
+                            <th>
+                                <input type="checkbox" name="" id="checkAll">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="listData">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button id="addSelectNames" class="edit-name modal-btn">حفظ</button>
+                <h2 class="row_num">0</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="./service.js"></script>
+
+<script>
+    var id = getUrlParameter('id');
+    var num = getUrlParameter('num');
+    var groupDate = getUrlParameter('date');
+    $('span.group-title').html('  | المجموعة رقم ' + num + '  | بتاريخ  ' + groupDate)
+
+    function printContent(el) {
+        var restorepage = $('body').html();
+        var printcontent = $('#' + el).clone();
+        $('body').empty().html(printcontent);
+        $('#' + el).parent().prepend("<h4 class='report-title'> أسماء المجموعة رقم " + num + "  | بتاريخ  " + groupDate + "</h4>" )
+        $('.no-print').hide();
+        window.print();
+        $('body').html(restorepage);
+    }
+    $('#print').on('click', function (e) {
+        printContent("printTable")
+    })
+    $(document).ready(function () {
+        getGroupRow()
+    });
+
+    $('#addNewGroup').click(function () {
+        var namesId = [];
+        for (let i = 0; i < $('.group-row #nameId').length; i++) {
+            namesId.push($('.group-row #nameId')[i].attributes['name-id'].value)
+        }
+        getNamesModal(id, namesId, num, function (err, row) {
+            if (!err) {
+                $('#selectTable .listData').html('');
+                row.forEach(result => {
+                    $('#selectTable .listData').append(
+                        '<tr><td>' + result.id + '</td><td>' + result.name + '</td><td><input type="checkbox" name-id="' + result.id + '" name="names" class="checkName"></td></tr>'
+                    )
+                });
+
+            }
+        });
+        $('#selectNamesModal').fadeIn();
+    });
+    var selected = [];
+    $('#checkAll').click(function () {
+        if (this.checked) {
+            selected = [];
+            $('.listData input[name="names"]').each(function () {
+                this.checked = true;
+                selected.push($(this).attr('name-id'));
+            });
+
+            $('.row_num').text(selected.length)
+        } else {
+            $('.listData input[name="names"]').each(function () { this.checked = false; });
+            selected = [];
+            $('.row_num').text(selected.length)
+        }
+    })
+
+    $('.listData').on('click', 'input[name="names"]', function () {
+        if (this.checked) {
+            selected.push($(this).attr('name-id'));
+            $('.row_num').text(selected.length)
+            console.log("checked")
+        } else {
+            selected.pop();
+            $('.row_num').text(selected.length)
+            console.log("unChecked")
+        }
+    });
+
+
+
+    //close modal
+    $(".close").click(function () {
+        $('.modal').fadeOut();
+    });
+
+    $('.group-info').on('click', '#remove-name', function () {
+        var nameId = $(this).attr('data-id');
+        swal({
+            title: "سوف تقوم بأزالة هذا الاسم من المجموعة هل تريد ذك حقا؟",
+            text: "سيتم ازالة الاسم من هذه المجموعه فقط",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    removeNameFromGroup(nameId, id);
+                    getGroupRow();
+                    swal("تمت الازالة بنجاح", {
+                        icon: "success",
+                    });
+                } else {
+                    swal("لم تتم عملية الازالة");
+                }
+            });
+
+    });
+
+    $('#addSelectNames').click(function () {
+        selected.forEach(nameId => {
+            insertNamesToGroup(id, nameId);
+        });
+        $('.modal').fadeOut();
+        selected = [];
+        getGroupRow();
+
+    });
+
+    $('#deleteGroup').click(function () {
+        swal({
+            title: "سوف تقوم بحذف هذا العنصر هل انت متأكد من ذلك ؟",
+            text: "بعد هذي العملية لاتستطيع استرجاع العنصر المحذوف",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    deleteGroup(id)
+                    getGroupRow()
+                    location.hash = "#groups";
+
+                    swal("تم الحذف بنجاح", {
+                        icon: "success",
+                    });
+                } else {
+                    swal("لم تتم عملية الحذف");
+                }
+            });
+
+    })
+
+    function getGroupRow() {
+
+        getGroup(id, function (err, row) {
+            if (!err) {
+                $('.group-row').html('');
+                row.forEach(result => {
+                    $('.group-row').append(
+                        '<tr id="nameId" name-id="' + result.id + '"><td class="row-index">23</td><td>' + result.name + '</td><td>' + result.age + '</td><td>' + result.achievement + '</td><td>' + result.phon + '</td>' +
+                        '<td class="control no-print"><button id="remove-name" data-id="' + result.id + '" class="btn-delete">ازالة</button></td></tr>'
+                    )
+                });
+            }
+
+            for (let i = 0; i < $('.group-row tr').length; i++) {
+                $('.group-row tr')[i].firstElementChild.innerHTML = i + 1
+            }
+        })
+    }
+
+
+
+    $(".searchModal").on("keyup", function () {
+        var value = $(this).val();
+        $("table tbody tr").each(function (index) {
+            if (index !== 0) {
+                var $row = $(this);
+                //Filter down tds which inner text matches indexOf check
+                var matches = $row.find('td').filter(function (ix, item) {
+                    return $(item).text().indexOf(value) > -1;
+                });
+
+                //if matches exist then show else hide
+                if (matches.length != 0) {
+                    $row.show();
+                }
+                else {
+                    $row.hide();
+                }
+            }
+        });
+    });
+
+
+    $("#search").on("keyup", function () {
+        var value = $(this).val();
+        $("table tr").each(function (index) {
+            if (index !== 0) {
+                var $row = $(this);
+                //Filter down tds which inner text matches indexOf check
+                var matches = $row.find('td').filter(function (ix, item) {
+                    return $(item).text().indexOf(value) > -1;
+                });
+
+                //if matches exist then show else hide
+                if (matches.length != 0) {
+                    $row.show();
+                }
+                else {
+                    $row.hide();
+                }
+            }
+        });
+    });
+
+
+
+
+
+</script>

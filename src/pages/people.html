@@ -1,0 +1,215 @@
+<div class="people">
+    <div class="header">
+        <input type="text" name="" id="search" placeholder="ادخل كلمة البحث">
+        <span class="num-names"></span>
+        <button id="addNewName" class="btn-add">أضافة اسم جديد</button>
+    </div>
+    <div class="body">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>الاسم الكامل</th>
+                    <th>تاريخ الميلاد</th>
+                    <th>التحصيل الدراسي</th>
+                    <th>رقم الهاتف</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="all-names">
+
+
+            </tbody>
+        </table>
+    </div>
+
+    <div id="addNameModal" class="modal">
+        <div class="content">
+            <div class="modal-header">
+                <h4 class="title">اضافة اسم جديد</h4>
+                <button class="close">&times;</button>
+            </div>
+            <div class="modal-body" id="dataInput">
+                <input type="text" id="name" placeholder="الاسم الكامل">
+                <input type="text" id="age" placeholder="تاريخ الميلاد">
+                <input type="text" id="achievement" placeholder="التحصيل الدراسي">
+                <input type="text" id="phon" placeholder="رقم الهاتف">
+            </div>
+            <div class="modal-footer">
+                <button class="save-name modal-btn">حفظ</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="editNameModal" class="modal">
+        <div class="content">
+            <div class="modal-header">
+                <h4 class="title">تعديل الحقل</h4>
+                <button class="close">&times;</button>
+            </div>
+            <div class="modal-body" id="dataInput">
+                <input type="hidden" id="id">
+                <input type="text" id="name" placeholder="الاسم الكامل">
+                <input type="text" id="age" placeholder="تاريخ الميلاد">
+                <input type="text" id="achievement" placeholder="التحصيل الدراسي">
+                <input type="text" id="phon" placeholder="رقم الهاتف">
+            </div>
+            <div class="modal-footer">
+                <button class="edit-name modal-btn">حفظ</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="./service.js"></script>
+<script>
+
+    // show all data on ready
+    $(document).ready(function () {
+        getData();
+  
+    });
+
+    $('table .all-names').on('change',function(){
+       // $('.num-names').html($('.all-names tr').length);
+       console.log('udate')
+    })
+
+
+    // search from table
+    $("#search").on("keyup", function () {
+        
+        var value = $(this).val();
+        $("table tr").each(function (index) {
+            if (index !== 0) {
+                var $row = $(this);
+                //Filter down tds which inner text matches indexOf check
+                var matches = $row.find('td').filter(function (ix, item) {
+                    return $(item).text().indexOf(value) > -1;
+                });
+                
+                //if matches exist then show else hide
+                if (matches.length != 0) {
+                    $row.show();
+                }
+                else {
+                    
+                    $row.hide();
+                }
+            }
+        });
+        
+    });
+
+    //add new record
+    $("#addNewName").click(function () {
+        $('#addNameModal').fadeIn();
+    });
+    //edit new record
+    $('table').on('click', '.all-names .btn-edit', function () {
+        var idSelector = $(this).parent().siblings()[0];
+        var nameSelector = $(this).parent().siblings()[1];
+        var ageSelector = $(this).parent().siblings()[2];
+        var achievSelector = $(this).parent().siblings()[3];
+        var phonSelector = $(this).parent().siblings()[4];
+
+        $('#editNameModal #id').val($(idSelector).html());
+        $('#editNameModal #name').val($(nameSelector).html());
+        $('#editNameModal #age').val($(ageSelector).html());
+        $('#editNameModal #achievement').val($(achievSelector).html());
+        $('#editNameModal #phon').val($(phonSelector).html());
+        $('#editNameModal').fadeIn();
+    });
+    $('.edit-name').click(function () {
+        var data = [];
+        for (let i = 1; i < 5; i++) {
+            var selcetor = $('#editNameModal #dataInput').children()[i];
+            console.log(selcetor)
+            if ($(selcetor).val()) {
+                data.push($(selcetor).val());
+            } else {
+                swal('البيانات غير كاملة !')
+            }
+        }
+        if (data.length==4) {
+            var id = $('#editNameModal #id').val();
+            editName(data, id);
+            $('.modal').fadeOut();
+            swal({
+                title: "تم التعديل بنجاح",
+                icon: "success",
+                button: "تم",
+            });
+            getData()
+
+        }
+    })
+
+
+    $('.save-name').click(function () {
+        var data = [];
+        for (let i = 0; i < 4; i++) {
+            var selcetor = $('#addNameModal #dataInput').children()[i];
+            if ($(selcetor).val()) {
+                data.push($(selcetor).val());
+            } else {
+                swal('البيانات غير كاملة !')
+            }
+        }
+        if (data.length==4) {
+            insertName(data);
+            $('#addNameModal').fadeOut();
+            getData()
+
+        }
+    })
+
+    //close modal
+    $(".close").click(function () {
+        $('.modal').fadeOut();
+    });
+
+    //delete row 
+    $('table').on('click', '.all-names .btn-delete', function () {
+        var nameId = $(this).attr('data-id');
+        swal({
+            title: "سوف تقوم بحذف هذا العنصر هل انت متأكد من ذلك ؟",
+            text: "بعد هذي العملية لاتستطيع استرجاع العنصر المحذوف",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                if (willDelete) {
+                    deleteName(nameId);
+                    getData();
+                    swal("تم الحذف بنجاح", {
+                        icon: "success",
+                    });
+                } else {
+                    swal("لم تتم عملية الحذف");
+                }
+            });
+
+    })
+
+
+    function getData() {
+        getAllNames(function (err, row) {
+            if (!err) {
+                $('.all-names').html('');
+                row.forEach(result => {
+                    $('.all-names').append(
+                        '<tr><td>' + result.id + '</td><td>' + result.name + '</td><td>' + result.age + '</td><td>' + result.achievement + '</td><td>' + result.phon + '</td><td class="control">' +
+                        '<button data-id="' + result.id + '" class="btn-edit">تعديل</button> <button data-id="' + result.id + '" class="btn-delete">حذف</button></td></tr>'
+                    )
+                });
+            }
+            
+          
+            setTimeout(() => {
+                $('.num-names').html('  | عدد الاسماء الكلي : '+$('.all-names tr').length).fadeIn();
+            }, 100);
+        })
+    }
+</script>
